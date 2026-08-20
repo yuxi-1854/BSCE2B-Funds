@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b6b3a" />
-  <title>BSCE 2B • Class Fund</title>
+  <title>Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />z
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -22,17 +22,21 @@
       --surface: #ffffff;
       --surface-soft: #f6faf7;
       --line: #d7e3db;
-      --shadow: 0 18px 48px rgba(4, 59, 32, 0.12);
-      --radius-lg: 28px;
-      --radius-md: 18px;
-      --radius-sm: 14px;
       --bg-start: #f8fffb;
       --bg-end: #f2f8f5;
       --topbar-bg: rgba(255,255,255,.96);
       --nav-text: #506059;
       --preview-bg: #ffffff;
       --preview-bar: #f8fbf9;
+      --shadow: 0 18px 48px rgba(4, 59, 32, 0.12);
     }
+
+    .login-logo img {
+      height: 61px; 
+      width: auto;
+      display: block;
+      margin: 0 auto; 
+}
 
     body.dark {
       --ink: #edf5ef;
@@ -46,7 +50,7 @@
       --bg-start: #09130e;
       --bg-end: #0d1b14;
       --topbar-bg: rgba(14,31,22,.96);
-      --nav-text: #b6c5bc;
+      --nav-text: #edf5ef;
       --preview-bg: #0d1712;
       --preview-bar: #15251d;
     }
@@ -58,386 +62,281 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
       background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 100%);
-      transition: background .25s ease, color .25s ease;
       min-height: 100vh;
+      transition: background .25s ease, color .25s ease;
     }
     a { color: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
 
-    .app-shell {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 20px 0 48px;
-    }
+    body.auth-locked .app-shell { display: none; }
+    body:not(.auth-locked) .login-screen { display: none; }
 
-    .topbar {
-      position: sticky;
-      top: 14px;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 10px 12px 10px 18px;
-      background: var(--topbar-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(11,107,58,.16);
-      border-top: 3px solid var(--gold);
-      border-radius: 22px;
-      box-shadow: 0 12px 30px rgba(0, 81, 38, .08);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      text-decoration: none;
-      min-width: 180px;
-    }
-    .brand-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
+    .login-screen {
+      min-height: 100vh;
       display: grid;
       place-items: center;
-      background: var(--green);
-      color: white;
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: .05em;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(216,178,76,.12), transparent 30%),
+        radial-gradient(circle at 90% 85%, rgba(11,107,58,.16), transparent 34%),
+        linear-gradient(145deg, var(--bg-start), var(--bg-end));
     }
-    .brand-copy strong { display: block; font-size: 14px; letter-spacing: -.02em; }
-    .brand-copy span { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .login-card {
+      width: min(460px, 100%);
+      padding: 38px;
+      border: 1px solid rgba(216,178,76,.35);
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 19px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-weight: 900;
+      letter-spacing: .06em;
+    }
+    .login-card h1 { margin: 0; color: var(--gold); font-size: 30px; letter-spacing: -.045em; }
+    .login-card p { margin: 10px auto 24px; max-width: 340px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .login-form { display:grid; gap:11px; }
+    .login-form input {
+      width:100%; padding:13px 14px; border:1px solid var(--line); border-radius:13px;
+      background:var(--surface-soft); color:var(--ink); font:inherit; font-size:13px; outline:none;
+    }
+    .login-form input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(216,178,76,.14); }
+    .login-submit {
+      border:0; border-radius:13px; padding:13px 15px; margin-top:3px;
+      background:linear-gradient(135deg,var(--green) 0%,var(--green-deep) 100%);
+      color:#fff; font:inherit; font-size:13px; font-weight:800; cursor:pointer;
+      border:1px solid rgba(216,178,76,.55);
+    }
+    .login-submit:hover { filter:brightness(1.06); }
+    .login-status { min-height:20px; margin-top:16px; font-size:12px; font-weight:700; color:#b3261e; }
+    .login-status.ok { color:var(--green); }
+    body.dark .login-status.ok { color:var(--gold); }
 
-    .nav {
-      display: flex;
-      flex: 1;
-      gap: 5px;
-      overflow-x: auto;
-      scrollbar-width: none;
+    .app-shell { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:20px 0 48px; }
+    .topbar {
+      position: sticky; top:14px; z-index:20; display:flex; align-items:center; gap:10px;
+      padding:10px 12px 10px 18px; background:var(--topbar-bg); backdrop-filter:blur(16px);
+      border:1px solid rgba(11,107,58,.16); border-top:3px solid var(--gold); border-radius:22px;
+      box-shadow:0 12px 30px rgba(0,81,38,.08);
     }
-    .nav::-webkit-scrollbar { display: none; }
-    .nav a {
-      position: relative;
-      text-decoration: none;
-      white-space: nowrap;
-      padding: 11px 13px;
-      border-radius: 13px;
-      color: var(--nav-text);
-      font-size: 12px;
-      font-weight: 700;
-      transition: .2s ease;
-    }
-    .nav a:hover, .nav a.active { background: var(--green-tint); color: var(--green-deep); }
-    body.dark .nav a { color: #edf5ef; }
-    body.dark .nav a:hover, body.dark .nav a.active { background: var(--gold-soft); color: var(--gold); }
+    .brand { display:flex; align-items:center; gap:11px; text-decoration:none; min-width:180px; }
+    .brand-mark { width:36px; height:36px; border-radius:12px; display:grid; place-items:center; background:var(--green); color:#fff; font-weight:800; font-size:13px; letter-spacing:.05em; }
+    .brand-copy strong { display:block; font-size:14px; letter-spacing:-.02em; }
+    .brand-copy span { display:block; font-size:11px; color:var(--muted); margin-top:2px; }
+    .nav { display:flex; flex:1; gap:5px; overflow-x:auto; scrollbar-width:none; }
+    .nav::-webkit-scrollbar { display:none; }
+    .nav a { white-space:nowrap; text-decoration:none; padding:11px 13px; border-radius:13px; color:var(--nav-text); font-size:12px; font-weight:700; transition:.2s ease; }
+    .nav a:hover, .nav a.active { background:var(--green-tint); color:var(--green-deep); }
+    body.dark .nav a { color:#edf5ef; }
+    body.dark .nav a:hover, body.dark .nav a.active { background:var(--gold-soft); color:var(--gold); }
 
-    .theme-toggle {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:38px;
-      height:38px;
-      flex:0 0 38px;
-      border:1px solid var(--line);
-      border-radius:13px;
-      background:var(--surface);
-      color:var(--ink);
-      cursor:pointer;
-      font-size:16px;
+    .theme-toggle, .signout-btn {
+      border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer;
       transition:.2s ease;
     }
-    .theme-toggle:hover { transform:translateY(-1px); border-color:rgba(216,178,76,.7); }
-    .theme-toggle:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
+    .theme-toggle { width:38px; height:38px; flex:0 0 38px; border-radius:13px; font-size:16px; }
+    .theme-toggle:hover, .signout-btn:hover { transform:translateY(-1px); border-color:rgba(216,178,76,.7); }
+    .signed-in-bar { display:flex; align-items:center; gap:7px; }
+    .user-email { color:var(--muted); font-size:10px; font-weight:700; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .signout-btn { border-radius:11px; padding:8px 10px; font:inherit; font-size:10px; font-weight:800; }
 
-    .cash-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
-      background: var(--green);
-      color: #fff;
-      border-radius: 14px;
-      box-shadow: 0 8px 20px rgba(0,177,79,.22);
-      white-space: nowrap;
-    }
-    .cash-pill small { font-size: 10px; opacity: .8; font-weight: 700; }
-    .cash-pill strong { font-size: 13px; font-variant-numeric: tabular-nums; }
+    .cash-pill { display:flex; align-items:center; gap:8px; padding:9px 12px; background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%); color:#fff; border:1px solid rgba(216,178,76,.55); border-radius:14px; box-shadow:0 8px 20px rgba(4,59,32,.22); white-space:nowrap; }
+    .cash-pill small { font-size:10px; opacity:.8; font-weight:700; }
+    .cash-pill strong { font-size:13px; font-variant-numeric:tabular-nums; }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 20px;
-      margin-top: 24px;
-    }
-    .hero-card, .summary-card, .section-card {
-      background: var(--surface);
-      border: 1px solid rgba(11,107,58,.10);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      position: relative;
-      overflow: hidden;
-      min-height: 330px;
-      padding: 38px;
-      background:
-        radial-gradient(circle at 88% 15%, rgba(255,255,255,.22) 0 4%, transparent 5%),
-        linear-gradient(135deg, var(--green-deep) 0%, var(--green) 58%, #2f8b5e 100%);
-      color: white;
-    }
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      right: -80px;
-      bottom: -90px;
-      border: 42px solid rgba(255,255,255,.09);
-      border-radius: 50%;
-    }
-    .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .78; }
-    .hero h1 {
-      margin: 14px 0 6px;
-      max-width: 620px;
-      font-size: clamp(34px, 6vw, 58px);
-      line-height: .98;
-      letter-spacing: -.06em;
-      color: var(--gold);
-      text-shadow: 0 2px 14px rgba(0,0,0,.16);
-    }
-    .hero p { margin: 0; max-width: 600px; line-height: 1.65; opacity: .86; font-size: 14px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; position: relative; z-index: 2; }
-    .btn {
-      border: 0;
-      border-radius: 13px;
-      padding: 12px 15px;
-      text-decoration: none;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .btn-light { background: #fff; color: var(--green-deep); }
-    .btn-ghost { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.18); }
-
-    .summary-card {
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 330px;
-    }
-    .summary-label { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
-    .balance {
-      margin-top: 8px;
-      color: var(--green-deep);
-      font-size: clamp(38px, 6vw, 56px);
-      line-height: 1;
-      letter-spacing: -.06em;
-      color: var(--green-deep);
-      font-variant-numeric: tabular-nums;
-      text-shadow: 0 1px 0 rgba(255,255,255,.18);
-    }
-    body.dark .balance {
-      color: #86d88f;
-      text-shadow: 0 1px 0 rgba(0,0,0,.2);
-    }
-    .summary-note { color: var(--muted); font-size: 12px; line-height: 1.55; margin-top: 8px; }
-    .summary-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .quick-link {
-      text-decoration: none;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: var(--surface-soft);
-      transition: .2s ease;
-    }
-    .quick-link:hover { transform: translateY(-2px); border-color: rgba(216,178,76,.55); box-shadow: 0 10px 24px rgba(0,91,43,.08); }
-    .quick-link strong { display: block; font-size: 12px; }
-    .quick-link span { display: block; margin-top: 4px; font-size: 10px; color: var(--muted); }
-
-    main { padding-top: 24px; }
-    .page-section { margin-top: 20px; }
+    main { padding-top:24px; }
     .view { display:none; }
-    .view.active { display:block; animation: fadeIn .2s ease; }
+    .view.active { display:block; animation:fadeIn .2s ease; }
     @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
-    .section-card { padding: 26px; }
+
+    .hero { display:grid; grid-template-columns:1.25fr .75fr; gap:20px; }
+    .hero-card, .summary-card, .section-card { background:var(--surface); border:1px solid rgba(11,107,58,.10); border-radius:28px; box-shadow:var(--shadow); }
+    .hero-card { position:relative; overflow:hidden; min-height:330px; padding:38px; background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 58%,#2f8b5e 100%); color:#fff; }
+    .hero-card::after { content:""; position:absolute; width:250px; height:250px; right:-80px; bottom:-90px; border:42px solid rgba(255,255,255,.09); border-radius:50%; }
+    .eyebrow { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.78; }
+    .hero h1 { margin:14px 0 6px; max-width:620px; font-size:clamp(34px,6vw,58px); line-height:.98; letter-spacing:-.055em; color:var(--gold); font-weight:800; }
+    .hero h1 span { color:#ffffff; }
+    body.dark .hero h1 span { color:#ffffff; }
+    .hero p { margin:0; max-width:600px; line-height:1.65; opacity:.86; font-size:14px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; position:relative; z-index:2; }
+    .btn { border:0; border-radius:13px; padding:12px 15px; text-decoration:none; font:inherit; font-size:12px; font-weight:800; cursor:pointer; }
+    .btn-light { background:#fff; color:var(--green-deep); }
+    .btn-ghost { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.18); }
+    .summary-card { padding:28px; display:flex; flex-direction:column; justify-content:space-between; min-height:330px; }
+    .summary-label { font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; }
+    .balance { margin-top:8px; font-size:clamp(38px,6vw,56px); line-height:1; letter-spacing:-.06em; color:var(--green-deep); font-variant-numeric:tabular-nums; }
+    body.dark .balance { color:var(--gold); }
+    .summary-note { color:var(--muted); font-size:12px; line-height:1.55; margin-top:8px; }
+    .summary-links { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .quick-link { text-decoration:none; padding:14px; border:1px solid var(--line); border-radius:15px; background:var(--surface-soft); transition:.2s ease; }
+    .quick-link:hover { transform:translateY(-2px); border-color:rgba(216,178,76,.55); box-shadow:0 10px 24px rgba(0,91,43,.08); }
+    .quick-link strong { display:block; font-size:12px; }
+    .quick-link span { display:block; margin-top:4px; font-size:10px; color:var(--muted); }
+    body.dark .quick-link strong { color:var(--gold); }
+
+    .page-section { margin-top:20px; }
+    .section-card { padding:26px; }
     .section-head { display:flex; justify-content:space-between; gap:20px; align-items:flex-end; margin-bottom:18px; }
-    .section-head h2 { margin:0; font-size: 23px; letter-spacing:-.035em; }
-    .section-head p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
-
-    .allocation-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
-    .allocation {
-      min-height: 160px;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      background: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
-      cursor: pointer;
-      transition: .2s ease;
-    }
-    .allocation:hover { transform: translateY(-3px); border-color: rgba(216,178,76,.75); box-shadow: 0 14px 28px rgba(0,91,43,.08); }
+    .section-head h2 { margin:0; font-size:23px; letter-spacing:-.035em; }
+    .section-head p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+    .allocation-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .allocation { min-height:160px; padding:20px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(180deg,var(--surface) 0%,var(--surface-soft) 100%); transition:.2s ease; }
+    .allocation:hover { transform:translateY(-3px); border-color:rgba(216,178,76,.75); box-shadow:0 14px 28px rgba(0,91,43,.08); }
     .allocation-top { display:flex; justify-content:space-between; align-items:center; gap:10px; }
-    .allocation-number {
-      width: 33px;
-      height: 33px;
-      border-radius: 11px;
-      display:grid;
-      place-items:center;
-      color: var(--green-deep);
-      background: linear-gradient(135deg, var(--gold-soft), #f8e9ae);
-      border: 1px solid rgba(216,178,76,.45);
-      font-size: 11px;
-      font-weight: 800;
-    }
+    .allocation-number { width:33px; height:33px; border-radius:11px; display:grid; place-items:center; color:var(--green-deep); background:linear-gradient(135deg,var(--gold-soft),#f8e9ae); border:1px solid rgba(216,178,76,.45); font-size:11px; font-weight:800; }
     .placeholder-tag { font-size:10px; font-weight:700; color:var(--muted); }
-    .allocation h3 { margin: 28px 0 5px; font-size: 15px; }
+    .allocation h3 { margin:28px 0 5px; font-size:15px; }
     .allocation p { margin:0; font-size:12px; color:var(--muted); }
-    .allocation .money { margin-top: 12px; font-size: 22px; font-weight:800; letter-spacing:-.04em; color:var(--green-deep); }
-    body.dark .allocation .money { color: var(--gold); }
+    .allocation .money { margin-top:12px; font-size:22px; font-weight:800; letter-spacing:-.04em; color:var(--green-deep); }
+    body.dark .allocation .money { color:var(--gold); }
 
-    .cashflow-layout { display:grid; grid-template-columns: 280px minmax(0, 1fr); gap:14px; align-items:stretch; }
-    .info-panel { border:1px solid var(--line); border-radius:var(--radius-md); padding:22px; background:var(--surface-soft); }
+    .cashflow-layout { display:grid; grid-template-columns:280px minmax(0,1fr); gap:14px; align-items:stretch; }
+    .info-panel { border:1px solid var(--line); border-radius:18px; padding:22px; background:var(--surface-soft); }
     .info-panel h3 { margin:0 0 7px; font-size:15px; }
     .info-panel p { margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
     .sheet-url { display:block; margin-top:18px; padding:11px 12px; border-radius:12px; background:var(--surface); border:1px solid var(--line); font-size:11px; color:var(--green-deep); overflow-wrap:anywhere; text-decoration:none; font-weight:700; }
-    body.dark .sheet-url { color: var(--gold); }
-    .preview {
-      min-height: calc(100vh - 190px);
-      border-radius: var(--radius-md);
-      overflow:hidden;
-      border:1px solid var(--line);
-      background:var(--preview-bg);
-      position:relative;
-    }
+    body.dark .sheet-url { color:var(--gold); }
+    .preview { min-height:calc(100vh - 190px); border-radius:18px; overflow:hidden; border:1px solid var(--line); background:var(--preview-bg); position:relative; }
     .preview-bar { height:42px; display:flex; align-items:center; gap:6px; padding:0 12px; background:var(--preview-bar); border-bottom:1px solid var(--line); }
-    .dot { width:7px; height:7px; border-radius:50%; background:#c9d6cf; }
+    .dot { width:7px; height:7px; border-radius:50%; background:#99a89f; }
     .preview-title { margin-left:7px; font-size:10px; color:var(--muted); font-weight:700; }
     .preview iframe { width:100%; height:calc(100vh - 232px); min-height:620px; border:0; display:block; background:var(--preview-bg); }
-    .iframe-fallback { position:absolute; inset:42px 0 0; display:none; place-items:center; padding:28px; text-align:center; background:var(--preview-bg); }
-    .iframe-fallback p { margin:0 0 14px; color:var(--muted); font-size:12px; }
-    .iframe-fallback a { display:inline-block; text-decoration:none; padding:10px 13px; border-radius:12px; background:var(--green); color:#fff; font-size:11px; font-weight:800; }
-
     footer { text-align:center; color:var(--muted); font-size:10px; padding:24px 0 0; }
 
-    @media (max-width: 900px) {
-      .hero, .cashflow-layout { grid-template-columns: 1fr; }
-      .cashflow-layout { grid-template-columns: 1fr; }
-      .allocation-grid { grid-template-columns: repeat(2,1fr); }
-      .brand { min-width: auto; }
+    @media (max-width:900px) {
+      .hero, .cashflow-layout { grid-template-columns:1fr; }
+      .allocation-grid { grid-template-columns:repeat(2,1fr); }
+      .brand { min-width:auto; }
       .brand-copy { display:none; }
     }
-    @media (max-width: 620px) {
-      .app-shell { width:min(100% - 20px, 1180px); padding-top:10px; }
+    @media (max-width:620px) {
+      .app-shell { width:min(100% - 20px,1180px); padding-top:10px; }
       .topbar { top:8px; padding:8px; }
-      .cash-pill { padding:8px 10px; }
       .nav a { padding:10px 9px; }
+      .theme-toggle { display:none; }
+      .signed-in-bar { display:none !important; }
+      .cash-pill { padding:8px 10px; }
       .hero-card, .summary-card, .section-card { padding:20px; border-radius:22px; }
       .hero-card { min-height:300px; }
       .summary-links { grid-template-columns:1fr 1fr; }
       .allocation-grid { grid-template-columns:1fr; }
       .allocation { min-height:145px; }
-      .preview { min-height: calc(100vh - 250px); }
-      .preview iframe { min-height: calc(100vh - 300px); height: calc(100vh - 300px); }
+      .preview { min-height:calc(100vh - 250px); }
+      .preview iframe { min-height:calc(100vh - 300px); height:calc(100vh - 300px); }
+      .login-card { padding:30px 22px; }
     }
   </style>
 </head>
-<body>
+<body class="auth-locked">
+  <section class="login-screen" aria-label="Username and password sign in">
+    <div class="login-card">
+      <div class="login-logo">
+           <img src="images/2b-logo.png" alt="BSCE 2B Logo">
+      </div>
+      <h1>BSCE 2B Class Fund</h1>
+      <p>Sign in with an authorized BSCE 2B account to access the dashboard.</p>
+      <form id="loginForm" class="login-form" autocomplete="on">
+        <input id="usernameInput" type="text" name="username" placeholder="Username" autocomplete="username" required />
+        <input id="passwordInput" type="password" name="password" placeholder="Password" autocomplete="current-password" required />
+        <button class="login-submit" type="submit">Sign in</button>
+      </form>
+      <div id="loginStatus" class="login-status" aria-live="polite"></div>
+    </div>
+  </section>
+
   <div class="app-shell">
-    <header class="topbar">
-      <a class="brand" href="#home" data-view-link="home" aria-label="BSCE 2B Home">
-        <div class="brand-mark">2B</div>
-        <div class="brand-copy">
-          <strong>BSCE 2B</strong>
-          <span>Class Fund</span>
+      <header class="topbar">
+        <a class="brand" href="#home" data-view-link="home" aria-label="BSCE 2B Home">
+          <img src="images/2b-logo.png" alt="BSCE 2B Logo" class="brand-mark">
+          <div class="brand-copy">
+         <strong>BSCE 2B</strong>
+        <span>Class Fund Dashboard</span>
         </div>
-      </a>
+    </a>
 
       <nav class="nav" aria-label="Primary navigation">
-        <a class="nav-link active" href="#home" data-view-link="home" data-view="home">Homepage</a>
-        <a class="nav-link" href="#allocations" data-view-link="allocations" data-view="allocations">Allocations</a>
-        <a class="nav-link" href="#cash-flow" data-view-link="cash-flow" data-view="cash-flow">Cash Flow</a>
+        <a class="nav-link active" href="#home" data-view="home">Homepage</a>
+        <a class="nav-link" href="#allocations" data-view="allocations">Allocations</a>
+        <a class="nav-link" href="#cash-flow" data-view="cash-flow">Cash Flow</a>
         <a class="nav-link" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">Others ↗</a>
       </nav>
 
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Enable dark mode" aria-pressed="false" title="Toggle dark mode">☾</button>
-
-      <div class="cash-pill" title="Current total class fund">
-        <small>CASH</small>
-        <strong id="ribbonCash">₱0.00</strong>
+      <div class="signed-in-bar" id="signedInBar">
+        <span class="user-email" id="userEmail"></span>
+        <button class="signout-btn" id="signOutBtn" type="button">Sign out</button>
       </div>
+      <div class="cash-pill" title="Current total class fund"><small>CASH</small><strong id="ribbonCash">₱0.00</strong></div>
     </header>
 
     <main>
       <section id="home" class="view active">
         <div class="hero page-section">
-        <div class="hero-card">
-          <div class="eyebrow">BSCE 2B • Class Fund</div>
-          <h1>Class money,<br />kept clear.</h1>
-          <p>AD dashboard for tracking the class fund, allocations, and cash flow in one place.</p>
-          <div class="hero-actions">
-            <a class="btn btn-light" href="#allocations" data-view-link="allocations">View Allocations</a>
-            <a class="btn btn-ghost" href="#cash-flow" data-view-link="cash-flow">View Cash Flow</a>
+          <div class="hero-card">
+            <div class="eyebrow">BSCE 2B • Class Fund Dashboard</div>
+            <h1>Welcome, <span id="welcomeName">Classmate</span>!</h1>
+            <p>Use this dashboard to track how our class fund is collected, allocated and spent. This ensures transparency and accountability so that you have a clear view of where your money goes.</p>
+            <div class="hero-actions">
+              <a class="btn btn-light" href="#allocations" data-view-link="allocations">View Allocations</a>
+              <a class="btn btn-ghost" href="#cash-flow" data-view-link="cash-flow">View Cash Flow</a>
+              <a class="btn btn-ghost" href="https://docs.google.com/spreadsheets/d/1K0JCy6ykHAsyiokEzbebJ_0dv_1Vv3uenL1aZDlt2fI/edit?gid=227661211#gid=227661211" target="_blank" rel="noopener noreferrer">View in Sheets ↗</a>
+            </div>
           </div>
-        </div>
 
-        <aside class="summary-card" aria-label="Class fund summary">
-          <div>
-            <div class="summary-label">Total Class Fund</div>
-            <div class="balance" id="heroCash">₱0.00</div>
-            <div class="summary-note">Replace the placeholder amount in the script section at the bottom of this file.</div>
-          </div>
-          <div class="summary-links">
-            <a class="quick-link" href="#allocations" data-view-link="allocations"><strong>Allocations</strong><span>Six fund categories</span></a>
-            <a class="quick-link" href="#cash-flow" data-view-link="cash-flow"><strong>Cash Flow</strong><span>Sheet preview</span></a>
-            <a class="quick-link" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer"><strong>Others</strong><span>Open Google Docs ↗</span></a>
-            <a class="quick-link" href="#home" data-view-link="home"><strong>Homepage</strong><span>Current overview</span></a>
-          </div>
-        </aside>
+          <aside class="summary-card" aria-label="Class fund summary">
+            <div>
+              <div class="summary-label">Total Class Fund</div>
+              <div class="balance" id="heroCash">₱0.00</div>
+              <div class="summary-note">Last updated August 21 at 01:59</div><p>
+              <div class="summary-note"><strong>Active Fund Allocations:</strong></div>
+            </div>
+            <div class="summary-links">
+              <a class="quick-link" href="#allocations" data-view-link="allocations"><strong>Class Funds</strong><span>PHP 10.00/student</span></a>
+              <a class="quick-link" href="#allocations" data-view-link="allocations"><strong>CHRE-ARISE Mem. Fee</strong><span>PHP 80.00/student</span></a>
+              <a class="quick-link" href="#allocations" data-view-link="allocations"><strong>EMSS Membership Fee</strong><span>PHP 100.00/student</span></a>
+              <a class="quick-link" href="#allocations" data-view-link="allocations"><strong>PICE Membership Fee</strong><span><i>Will be Announced Soon</i></span></a>
+            </div>
+          </aside>
         </div>
       </section>
 
       <section id="allocations" class="view">
         <div class="page-section section-card">
-        <div class="section-head">
-          <div>
-            <h2>Allocations</h2>
-            <p>Visit Cash Flow tab for detailed breakdown of Funds and Cash Flows.</p>
-          </div>
-        </div>
-
-        <div class="allocation-grid">
-          <article class="allocation"><div class="allocation-top"><div class="allocation-number">01</div><span class="placeholder-tag">FUNDS</span></div><h3>Class Funds</h3><p>Total Class Funds Collected. Refer to Tres. Pontanares for Future Payments.</p><div class="money">₱261.00</div></article>
-          <article class="allocation"><div class="allocation-top"><div class="allocation-number">02</div><span class="placeholder-tag">A/R</span></div><h3>Accounts Receivable</h3><p>  Refer to Tres. Pontanares for more details.</p><div class="money">(₱1,300.00)</div></article>
-          <article class="allocation"><div class="allocation-top"><div class="allocation-number">03</div><span class="placeholder-tag">PHP 80.00/person</span></div><h3>CHRE-ARISE Membership Fee</h3><p><b>15 paid out of 48.</b><i>Visit Checklist under Cash Flow tab to view the list of payees.</i></p><div class="money">₱1,200.00</div></article>
-          <article class="allocation"><div class="allocation-top"><div class="allocation-number">04</div><span class="placeholder-tag">PHP 100.00/person</span></div><h3>EMSS Memebrship Fee</h3><p><b>1 paid out of 48.</b><i>Visit Checklist under Cash Flow tab to view the list of payees.</i></p><div class="money">₱100.00</div></article>
-          <article class="allocation"><div class="allocation-top"><div class="allocation-number">05</div><span class="placeholder-tag">N/A</span></div><h3>N/A</h3><p>N/A</p><div class="money">₱0.00</div></article>
-          <article class="allocation"><div class="allocation-top"><div class="allocation-number">06</div><span class="placeholder-tag">N/A</span></div><h3>N/A</h3><p>N/A</p><div class="money">₱0.00</div></article>
-        </div>
+          <div class="section-head"><div><h2>Fund Allocations</h2><p>See where and how much fund is Allocated.</p></div></div>
+          <div class="allocation-grid">
+            <article class="allocation"><div class="allocation-top"><div class="allocation-number">01</div><span class="placeholder-tag">BSCE 2B</span></div><h3>Class Funds</h3><p>Refer to Cash Flow Tab or Treasr. Pontanares for details.</p><div class="money">₱261.00</div></article>
+            <article class="allocation"><div class="allocation-top"><div class="allocation-number">02</div><span class="placeholder-tag">BSCE 2B</span></div><h3>Accounts Receivable</h3><p>Refer to Treasr. Pontanares for details.</p><div class="money">(₱1,300.00)</div></article>
+            <article class="allocation"><div class="allocation-top"><div class="allocation-number">03</div><span class="placeholder-tag">CHRE-ARISE</span></div><h3>CHRE-ARISE Membership Fee</h3><p><b>15 paid out of 48. </b>Visit Checklist or Cash Flow tab for reference.</p><div class="money">₱1,200.00</div></article>
+            <article class="allocation"><div class="allocation-top"><div class="allocation-number">04</div><span class="placeholder-tag">EMSS</span></div><h3>EMSS Membership Fee</h3><p><b>1 paid out of 48. </b>Visit Checklist or Cash Flow tab for reference.</p><div class="money">₱100.00</div></article>
+            <article class="allocation"><div class="allocation-top"><div class="allocation-number">05</div><span class="placeholder-tag">PICE</span></div><h3>PICE Membership Fee</h3><p><i>To Be Announced</i></p><div class="money">₱0.00</div></article>
         </div>
       </section>
 
       <section id="cash-flow" class="view">
         <div class="page-section section-card">
-        <div class="section-head">
-          <div>
-            <h2>Cash Flow</h2>
-            <p>Placeholder window for a future Gmkdlsmdklsoogle Sheet.</p>
+          <div class="section-head"><div><h2>Cash Flow</h2><p>Track all inflows <i>(contributions)</i> and outflows <i>(expenses)</i> of the class fund.</p></div></div>
+          <div class="cashflow-layout">
+            <div class="info-panel">
+              <h3>Sheet Tabs</h3>
+              <p>Select the following tab headers to redirect you to the corresponding Google Sheet Tab</p>
+              <a class="sheet-url" href="https://docs.google.com/spreadsheets/d/1K0JCy6ykHAsyiokEzbebJ_0dv_1Vv3uenL1aZDlt2fI/edit?gid=227661211#gid=227661211" target="_blank" rel="noopener noreferrer">Google Sheets • Cash Flow ↗</a>
+              <a class="sheet-url" href="https://docs.google.com/spreadsheets/d/1K0JCy6ykHAsyiokEzbebJ_0dv_1Vv3uenL1aZDlt2fI/edit?gid=361695410#gid=361695410" target="_blank" rel="noopener noreferrer">Google Sheets • Checklist ↗</a>
+            </div>
+            <div class="preview">
+              <div class="preview-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="preview-title">Cash Flow Preview</span></div>
+              <iframe src="https://docs.google.com/spreadsheets/d/1K0JCy6ykHAsyiokEzbebJ_0dv_1Vv3uenL1aZDlt2fI/edit?gid=227661211#gid=227661211" title="Cash Flow Placeholder Preview"></iframe>
+            </div>
           </div>
-        </div>
-        <div class="cashflow-layout">
-          <div class="info-panel">
-            <h3>Sheet preview</h3>
-            <p>The embeddnihghered window below uses Google as a placeholder. Swap the iframe URL for your actual Google Sheets publish/embed URL when your sheet is ready.</p>
-            <a class="sheet-url" href="https://sheets.google.com/" target="_blank" rel="noopener noreferrer">https://sheets.google.com/ ↗</a>
-          </div>
-          <div class="preview">
-            <div class="preview-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="preview-title">Cash Flow Preview</span></div>
-            <iframe src="https://docs.google.com/spreadsheets/d/1K0JCy6ykHAsyiokEzbebJ_0dv_1Vv3uenL1aZDlt2fI/edit?gid=0#gid=0" title="Cash Flow Placeholder Preview"></iframe>
-           
-          </div>
-        </div>
         </div>
       </section>
 
@@ -446,21 +345,138 @@
   </div>
 
   <script>
-   //--scripts--//
-    const TOTAL_CLASS_FUND = 261;
+    const AUTHORIZED_USERS = [
+{ username: "admin", password: "watdapak", displayName: "Admin" },
+{ username: "abanil", password: "25102181", displayName: "Steph" },
+{ username: "aniceto", password: "2420031", displayName: "Marlando" },
+{ username: "arbo", password: "25101096", displayName: "Marielle" },
+{ username: "badong", password: "25101097", displayName: "Jay" },
+{ username: "ballila", password: "25102768", displayName: "Allyson" },
+{ username: "barcenas", password: "25101100", displayName: "Xavier" },
+{ username: "basagre", password: "25102758", displayName: "Nath" },
+{ username: "bedar", password: "25101105", displayName: "Mark" },
+{ username: "bien", password: "25101108", displayName: "Franzen Jay" },
+{ username: "cordez", password: "25101193", displayName: "Miguel" },
+{ username: "cornelio", password: "25101194", displayName: "Mark" },
+{ username: "delossantos", password: "25101196", displayName: "Kurt" },
+{ username: "escolano", password: "25101200", displayName: "Rex" },
+{ username: "escuro", password: "25101201", displayName: "Jess" },
+{ username: "espinas", password: "25101202", displayName: "J.P." },
+{ username: "fajardo", password: "25101203", displayName: "Emman" },
+{ username: "gabarda", password: "25102756", displayName: "April" },
+{ username: "gaetos", password: "25101205", displayName: "Khrstyne" },
+{ username: "hernandez", password: "25101210", displayName: "Dik" },
+{ username: "hosana", password: "25101211", displayName: "Jalleah" },
+{ username: "judavar", password: "25101215", displayName: "Kim" },
+{ username: "labilles", password: "25101216", displayName: "Estela" },
+{ username: "lagdaan", password: "25101218", displayName: "Joad" },
+{ username: "legardo", password: "25101222", displayName: "Fritzh" },
+{ username: "llorin", password: "25101224", displayName: "Paul" },
+{ username: "llorin", password: "25101003", displayName: "Prince" },
+{ username: "nerflime", password: "25101003", displayName: "LiME" },
+{ username: "lovite", password: "25101225", displayName: "Mayor" },
+{ username: "malapo", password: "25101226", displayName: "Kathleen" },
+{ username: "manaog", password: "25101227", displayName: "Kyla" },
+{ username: "oliva", password: "25101236", displayName: "Niel" },
+{ username: "parañal", password: "25101241", displayName: "Jahnsen" },
+{ username: "pontanares", password: "25101244", displayName: "Dennis" },
+{ username: "rabuya", password: "25101246", displayName: "Alexis" },
+{ username: "ragot", password: "25101247", displayName: "Paul" },
+{ username: "ramboyong", password: "25101248", displayName: "Mark" },
+{ username: "ramos", password: "25101249", displayName: "Joshua" },
+{ username: "relorcasa", password: "25101262", displayName: "Lea" },
+{ username: "repuesto", password: "25101264", displayName: "Josiah Brent" },
+{ username: "rull", password: "25101267", displayName: "Lyra" },
+{ username: "sanao", password: "25101276", displayName: "Ella" },
+{ username: "santor", password: "25101278", displayName: "Hannah" },
+{ username: "sumpay", password: "25101280", displayName: "Vianei" },
+{ username: "talagtag", password: "25101281", displayName: "Gab" },
+{ username: "talaguit", password: "25101282", displayName: "Havana" },
+{ username: "tuyay", password: "25101284", displayName: "John Rey" },
+{ username: "valenzuela", password: "25101286", displayName: "Eric" },
+{ username: "velarde", password: "25101287", displayName: "Ken" },
+{ username: "villar", password: "25101291", displayName: "Austin" }
+    ];
 
-    const money = new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
-      minimumFractionDigits: 2
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('usernameInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginStatus = document.getElementById('loginStatus');
+    const signedInBar = document.getElementById('signedInBar');
+    const userEmail = document.getElementById('userEmail');
+    const signOutBtn = document.getElementById('signOutBtn');
+
+    function findAuthorizedUser(username, password) {
+      const normalized = username.trim().toLowerCase();
+      return AUTHORIZED_USERS.find(user =>
+        user.username.trim().toLowerCase() === normalized && user.password === password
+      );
+    }
+
+    function setWelcomeName(user) {
+      const el = document.getElementById("welcomeName");
+      if (el) el.textContent = (user && user.displayName) ? user.displayName : (user ? user.username : "Classmate");
+    }
+
+    function showDashboard(user) {
+      setWelcomeName(user);
+      document.body.classList.remove('auth-locked');
+      signedInBar.style.display = 'flex';
+      userEmail.textContent = user.displayName || user.username;
+      loginStatus.textContent = '';
+      loginStatus.className = 'login-status';
+      sessionStorage.setItem('bsce2b-authorized-user', user.username);
+    }
+
+    function denyDashboard() {
+      document.body.classList.add('auth-locked');
+      signedInBar.style.display = 'none';
+      sessionStorage.removeItem('bsce2b-authorized-user');
+      loginStatus.textContent = 'Incorrect username or password.';
+      loginStatus.className = 'login-status';
+      passwordInput.value = '';
+    }
+
+    function restoreSession() {
+      const savedUsername = sessionStorage.getItem('bsce2b-authorized-user');
+      if (!savedUsername) return;
+      const user = AUTHORIZED_USERS.find(item => item.username === savedUsername);
+      if (user) showDashboard(user);
+    }
+
+    loginForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const user = findAuthorizedUser(usernameInput.value, passwordInput.value);
+      if (user) {
+        loginStatus.className = 'login-status ok';
+        loginStatus.textContent = 'Access granted.';
+        showDashboard(user);
+      } else {
+        denyDashboard();
+      }
     });
 
+    signOutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('bsce2b-authorized-user');
+      document.body.classList.add('auth-locked');
+      signedInBar.style.display = 'none';
+      userEmail.textContent = '';
+      usernameInput.value = '';
+      passwordInput.value = '';
+      loginStatus.textContent = 'Signed out.';
+      loginStatus.className = 'login-status';
+    });
+
+    restoreSession();
+
+    // watermark ni jojo
+    const TOTAL_CLASS_FUND = 261;
+    const money = new Intl.NumberFormat('en-PH', { style:'currency', currency:'PHP', minimumFractionDigits:2 });
     document.getElementById('ribbonCash').textContent = money.format(TOTAL_CLASS_FUND);
     document.getElementById('heroCash').textContent = money.format(TOTAL_CLASS_FUND);
 
-    // Persistent dark mode.
+    // dark mode
     const themeToggle = document.getElementById('themeToggle');
-
     function applyTheme(theme) {
       const dark = theme === 'dark';
       document.body.classList.toggle('dark', dark);
@@ -469,65 +485,29 @@
       themeToggle.setAttribute('aria-label', dark ? 'Disable dark mode' : 'Enable dark mode');
       themeToggle.title = dark ? 'Switch to light mode' : 'Toggle dark mode';
     }
-
-    const savedTheme = localStorage.getItem('bsce2b-theme');
-    applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
-
+    applyTheme(localStorage.getItem('bsce2b-theme') === 'dark' ? 'dark' : 'light');
     themeToggle.addEventListener('click', () => {
-      const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
-      localStorage.setItem('bsce2b-theme', nextTheme);
-      applyTheme(nextTheme);
+      const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem('bsce2b-theme', next);
+      applyTheme(next);
     });
 
-    // Tab-style navigation: only one page view is visible at a time.
+    // Tab-style navigation: only one dashboard view is visible at a time.
     const navLinks = document.querySelectorAll('.nav-link[data-view]');
     const views = document.querySelectorAll('.view');
-    const quickLinks = document.querySelectorAll('[data-view-link]');
-
     function showView(viewId) {
       views.forEach(view => view.classList.toggle('active', view.id === viewId));
       navLinks.forEach(link => link.classList.toggle('active', link.dataset.view === viewId));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top:0, behavior:'smooth' });
       history.replaceState(null, '', `#${viewId}`);
     }
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        showView(link.dataset.view);
-      });
-    });
-
-    quickLinks.forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        showView(link.dataset.viewLink);
-      });
-    });
-
-    document.querySelectorAll('.btn[href^="#"]').forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        showView(link.getAttribute('href').slice(1));
-      });
-    });
-
+    navLinks.forEach(link => link.addEventListener('click', e => { e.preventDefault(); showView(link.dataset.view); }));
+    document.querySelectorAll('[data-view-link]').forEach(link => link.addEventListener('click', e => {
+      e.preventDefault();
+      if (link.dataset.viewLink) showView(link.dataset.viewLink);
+    }));
     const initialView = ['home','allocations','cash-flow'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
     showView(initialView);
-
-    // If Google refuses the iframe, keep the designed preview window and expose a direct link.
-    const frame = document.querySelector('.preview iframe');
-    const fallback = document.getElementById('iframeFallback');
-    frame.addEventListener('load', () => {
-      setTimeout(() => {
-        try {
-          const bodyText = frame.contentDocument?.body?.innerText || '';
-          if (bodyText.length < 1) fallback.style.display = 'grid';
-        } catch (_) {
-          // Cross-origin frames cannot be inspected; leave the preview visible.
-        }
-      }, 700);
-    });
   </script>
 </body>
 </html>
