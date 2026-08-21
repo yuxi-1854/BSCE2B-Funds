@@ -1,2 +1,1 @@
-current version:
-stable 26.8.21.4
+version stable 26.8.21.5
